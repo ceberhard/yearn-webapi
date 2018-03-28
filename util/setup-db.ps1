@@ -1,22 +1,14 @@
 
-#$base = (Get-Item -Path ".\" -Verbose).FullName
-
-#echo $base
-
-#echo $PSScriptRoot
-
 $dbpath = $PSScriptRoot + "\..\yearn.db"
-$ddlpath = $PSScriptRoot + "\..\database\DDL.sql"
-#$dmlpath = $PSScriptRoot + "\..\database\DML.sql"
+$ddlpath = "'" + $PSScriptRoot + "\..\database\DDL.sql'"
+$dmlpath = "'" + $PSScriptRoot + "\..\database\DML.sql'"
+$testdatapath = "'" + $PSScriptRoot + "\..\database\TestData.sql'"
 
-$testdatapath = $PSScriptRoot + "\..\database\TestData.sql"
+$ddlcmd = "sqlite3 " + $dbpath + " "".read " + $ddlpath + """"
+Invoke-Expression $ddlcmd
 
-#echo $dbpath
+$dmlcmd = "sqlite3 " + $dbpath + " "".read " + $dmlpath + """"
+Invoke-Expression $dmlcmd
 
-
-
-sqlite3 -batch $dbpath $(cat $ddlpath);
-#sqlite3 -batch $dbpath $(cat $dmlpath);
-sqlite3 -batch $dbpath $(cat $testdatapath);
-
-# sqlite3 $PSScriptRoot + "\..\yearn.db" $(cat $PSScriptRoot + "\database\DDL.sql");
+$testdatacmd = "sqlite3 " + $dbpath + " "".read " + $testdatapath + """"
+Invoke-Expression $testdatacmd
